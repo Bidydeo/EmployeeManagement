@@ -4,22 +4,10 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Companies</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        @role('Super Admin')
-                            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        @endrole
-                        @unlessrole('Super Admin')
-                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        @endunlessrole
-                        <li class="breadcrumb-item active">Companies</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+            @include('partials.header-breadcrumbs', [
+                'pageTitle' => 'List all companies',
+                'breadcrumbs' => [['label' => 'List all companies', 'active' => true]],
+            ])
         </div>
         <!-- /.container-fluid -->
     </div>
@@ -28,7 +16,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">List of Companies</h3>
+                    <h3 class="card-title">List all companies</h3>
                 </div>
                 <div class="card-body">
                     <div class="pull-right mb-2">
@@ -57,7 +45,13 @@
                                 <td>{{ $company->company_name }}</td>
                                 <td>
                                     @if ($company->company_logo)
-                                        <img src="{{ asset($company->company_logo) }}" alt="Company Logo" width="100">
+                                        <div class="image-container">
+                                            <img class="company-logo" src="{{ asset($company->company_logo) }}"
+                                                alt="Company Logo" width="100">
+                                            <div class="zoomed-image">
+                                                <img src="{{ asset($company->company_logo) }}" alt="Company Logo">
+                                            </div>
+                                        </div>
                                     @else
                                         <p>Fără logo</p>
                                     @endif

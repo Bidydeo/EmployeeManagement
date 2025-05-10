@@ -3,18 +3,13 @@
 @section('content')
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Create companies</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/admin/companies">Companies</a></li>
-                        <li class="breadcrumb-item active">Create a new company</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+            @include('partials.header-breadcrumbs', [
+                'pageTitle' => 'Create a new Company',
+                'breadcrumbs' => [
+                    ['label' => 'List all companies', 'url' => route('companies_index')],
+                    ['label' => 'Create a new company', 'active' => true],
+                ],
+            ])
         </div>
         <!-- /.container-fluid -->
     </div>

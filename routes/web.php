@@ -67,7 +67,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees', [EmployeeController::class,'index'])->name('employees_index');
 
     Route::get('/projects', [ProjectController::class,'index'])->name('projects_index');
-
+    Route::get('projects/{project:slug}/detail', [ProjectController::class, 'detail'])->name('project_detail');
+    Route::put('/projects/{project:slug}/files', [ProjectController::class, 'updateFiles'])->name('project_update_files');
+    
     Route::get('/teams', [TeamController::class,'index'])->name('teams_index');
     
     // Afișează toate cererile de concediu ale utilizatorului curent

@@ -3,17 +3,10 @@
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Chat Page</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Chat Page</li>
-                    </ol>
-                </div>
-            </div>
+            @include('partials.header-breadcrumbs', [
+                'pageTitle' => 'Chat',
+                'breadcrumbs' => [['label' => 'Chat', 'active' => true]],
+            ])
         </div><!-- /.container-fluid -->
     </section>
     <section class="content">

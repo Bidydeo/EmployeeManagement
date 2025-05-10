@@ -65,7 +65,7 @@
                                                 <script>
                                                     window.initialCompanyId = {{ $model->company_id ?? 'null' }};
                                                     window.initialProjectId = {{ $model->project_id ?? 'null' }};
-                                                    window.initialEmployeeIds = @json($model->employees->pluck('id') ?? []);
+                                                    window.initialEmployeeIds = @json(optional($model->employees)->pluck('id') ?? []);
                                                 </script>
                                             </select>
                                         @elseif ($field['type'] === 'select-multiple')

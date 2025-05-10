@@ -3,22 +3,10 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Teams</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        @role('Super Admin')
-                            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        @endrole
-                        @unlessrole('Super Admin')
-                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        @endunlessrole
-                        <li class="breadcrumb-item active">Teams list</li>
-                    </ol>
-                </div>
-            </div>
+            @include('partials.header-breadcrumbs', [
+                'pageTitle' => 'List all teams',
+                'breadcrumbs' => [['label' => 'List all teams', 'active' => true]],
+            ])
         </div><!-- /.container-fluid -->
     </section>
 
@@ -27,7 +15,7 @@
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">List of teams</h3>
+                <h3 class="card-title">List all teams</h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                         <i class="fas fa-minus"></i>

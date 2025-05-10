@@ -4,22 +4,10 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Clients</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        @role('Super Admin')
-                            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        @endrole
-                        @unlessrole('Super Admin')
-                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        @endunlessrole
-                        <li class="breadcrumb-item active">Clients</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+            @include('partials.header-breadcrumbs', [
+                'pageTitle' => 'List all clients',
+                'breadcrumbs' => [['label' => 'List all clients', 'active' => true]],
+            ])
         </div>
         <!-- /.container-fluid -->
     </div>
@@ -28,7 +16,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">List of Clients</h3>
+                    <h3 class="card-title">List all clients</h3>
                 </div>
                 <div class="card-body">
                     <div class="pull-right mb-2">

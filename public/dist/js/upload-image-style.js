@@ -40,3 +40,19 @@ function zoomImage(previewId) {
         modal.style.display = "flex";
     }
 }
+/* pentru zoom la trecerea peste poza(in index) */
+document.querySelectorAll(".company-logo").forEach((item) => {
+    item.addEventListener("mouseover", function () {
+        const zoomedImage = item
+            .closest(".image-container")
+            .querySelector(".zoomed-image");
+        zoomedImage.style.display = "block";
+    });
+
+    item.addEventListener("mouseout", function () {
+        const zoomedImage = item
+            .closest(".image-container")
+            .querySelector(".zoomed-image");
+        zoomedImage.style.display = "none";
+    });
+});

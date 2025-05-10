@@ -94,3 +94,43 @@ select[multiple] option:checked {
     background-color: #d0ebff;
     font-weight: bold;
 }
+
+/* pentru zoom la trecerea peste poza(in index) */
+/* Container pentru imagine */
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Imaginea mică */
+.company-logo {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 10%;
+}
+
+/* Imaginea mare care apare pe hover */
+.zoomed-image {
+    display: none;
+    position: fixed; /* Folosim fixed pentru a o poziționa relativ la ecran */
+    top: 50%;
+    left: 50%;
+    border-radius: 8px;
+    transform: translate(-50%, -50%); /* Centrează imaginea pe ecran */
+    max-width: 90%; /* Maximizează dimensiunea imaginii */
+    max-height: 80%; /* Previne să depășească dimensiunea ecranului */
+    z-index: 1000; /* Asigură că imaginea va fi deasupra altor elemente */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundal semitransparent */
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Apariția imaginii mari pe hover */
+.image-container:hover .zoomed-image {
+    display: block;
+}
+
+/* Dacă vrei să faci și zoom la imaginea originală */
+.company-logo:hover {
+    transform: scale(1.2);
+}

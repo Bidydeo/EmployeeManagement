@@ -4,22 +4,10 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Employees</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        @role('Super Admin')
-                            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-                        @endrole
-                        @unlessrole('Super Admin')
-                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        @endunlessrole
-                        <li class="breadcrumb-item active">Employees</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
+            @include('partials.header-breadcrumbs', [
+                'pageTitle' => 'List all employees',
+                'breadcrumbs' => [['label' => 'List all employees', 'active' => true]],
+            ])
         </div>
         <!-- /.container-fluid -->
     </div>
@@ -61,7 +49,7 @@
                                 </td>
                                 <td>{{ $employee->status }}</td>
                                 <td>{{ $employee->email }}<br>{{ $employee->phone }}</td>
-                                <td>{{ $employee->job_location }}</td>
+                                <td>{{ $employee->locations->pluck('name')->implode(', ') }}</td>
                                 @role('Super Admin')
                                     <td>
                                         {{-- Editare doar pentru Super Admin --}}
