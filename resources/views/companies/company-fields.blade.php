@@ -1,0 +1,22 @@
+<?php
+return [
+    ['name' => 'company_name', 'type' => 'text', 'label' => 'Company Name'],
+    ['name' => 'company_logo', 'type' => 'file', 'label' => 'Company Logo', 'accept' => 'image/jpeg, image/png, image/gif, image/tiff'],
+    ['name' => 'company_reg_com', 'type' => 'text', 'label' => 'Registru Comerțului'],
+    ['name' => 'company_cui', 'type' => 'text', 'label' => 'CUI'],
+    ['name' => 'company_country', 'type' => 'text', 'label' => 'Country'],
+    ['name' => 'company_town', 'type' => 'text', 'label' => 'Town'],
+    ['name' => 'company_district', 'type' => 'text', 'label' => 'District'],
+    ['name' => 'company_street_name', 'type' => 'text', 'label' => 'Street Name'],
+    ['name' => 'company_street_no', 'type' => 'text', 'label' => 'Street No'],
+    ['name' => 'website', 'type' => 'text', 'label' => 'Website'],
+    ['name' => 'iban', 'type' => 'text', 'label' => 'IBAN'],
+    ['name' => 'bank', 'type' => 'text', 'label' => 'Bank'],
+    ['name' => 'bank_address', 'type' => 'text', 'label' => 'Bank Address'],
+    ['name' => 'bank_city', 'type' => 'text', 'label' => 'Bank City'],
+    ['name' => 'bank_swift', 'type' => 'text', 'label' => 'Bank Swift'],
+    ['name' => 'company_email', 'type' => 'email', 'label' => 'Email'],
+    ['name' => 'company_phone', 'type' => 'text', 'label' => 'Phone'],
+    ['name' => 'company_admin', 'type' => 'text', 'label' => 'Administrator'],
+    ['name' => 'domeniu_email', 'type' => 'text', 'label' => 'Domeniu Email'],
+];

@@ -50,9 +50,8 @@ class AttendanceController extends Controller
 
         // Parcurgem locațiile și calculăm distanța
         foreach ($employee->locations as $location) {
-            // Calculează distanța dintre coordonatele utilizatorului și locație
-            $distance = $location->distanceTo($request->latitude, $request->longitude);
-
+        // Calculează distanța folosind metoda Haversine
+        $distance = $this->haversineDistance($request->latitude, $request->longitude, $location->latitude, $location->longitude);
             // Verifică dacă angajatul este în raza specificată pentru această locație
             if ($distance <= $location->radius && $distance < $minDistance) {
                 $minDistance = $distance;
@@ -88,7 +87,27 @@ class AttendanceController extends Controller
         ]
         ]);
     }
-    public function clockOut(Request $request)
+    private function haversineDistance($lat1, $lon1, $lat2, $lon2)
+        {
+            $earthRadius = 6371000; // Raza Pământului în metri
+
+            $lat1 = deg2rad($lat1);
+            $lon1 = deg2rad($lon1);
+            $lat2 = deg2rad($lat2);
+            $lon2 = deg2rad($lon2);
+
+            $dLat = $lat2 - $lat1;
+            $dLon = $lon2 - $lon1;
+
+            $a = sin($dLat / 2) * sin($dLat / 2) +
+                cos($lat1) * cos($lat2) *
+                sin($dLon / 2) * sin($dLon / 2);
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+            return $earthRadius * $c; // Distanța în metri
+        }
+    
+        public function clockOut(Request $request)
     {
         $employee = Auth::user()->employee; // Presupunând că utilizatorul este autentificat
 

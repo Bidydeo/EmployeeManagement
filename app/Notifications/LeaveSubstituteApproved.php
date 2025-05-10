@@ -52,8 +52,8 @@ class LeaveSubstituteApproved extends Notification
             ->line('Motiv: ' . $this->leaveApproval->reason)
             ->action('Vezi cererea', url('/leaves/' . $this->leaveApproval->id))
             ->line('Te rugăm să aprobi sau să respingi această cerere!')
-            ->line('**[Aprobă cererea](' . route('leaves.substituteApproved', $this->leaveApproval->id) . ')**')
-            ->line('**[Respinge cererea](' . route('leaves.substituteRejected', $this->leaveApproval->id) . ')**')
+            ->line('**[Aprobă cererea](' . route('leaves_substituteApproved', $this->leaveApproval->id) . ')**')
+            ->line('**[Respinge cererea](' . route('leaves_substituteRejected', $this->leaveApproval->id) . ')**')
             ->line('Mulțumim!');
     }
 

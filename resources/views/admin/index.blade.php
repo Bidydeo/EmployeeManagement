@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends($userLayout)
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">

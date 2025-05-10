@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained(); // Legătura cu angajatul
-            $table->foreignId('location_id')->constrained(); // Legătura cu locația
+            $table->foreignId('location_id')->constrained('locations')->cascadeOnDelete(); // Legătura cu locația
             $table->date('date'); // Data
             $table->time('clock_in_time')->nullable(); // Ora clock in
             $table->time('clock_out_time')->nullable(); // Ora clock out
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('longitude_in', 10, 7)->nullable(); // Longitudine la clock in/out
             $table->decimal('latitude_out', 10, 7)->nullable(); // Latitudine la clock in/out
             $table->decimal('longitude_out', 10, 7)->nullable(); // Longitudine la clock in/out
+            $table->softDeletes(); // adaugă coloana deleted_at
             $table->timestamps();
         });
     }

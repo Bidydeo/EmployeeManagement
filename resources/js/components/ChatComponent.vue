@@ -12,7 +12,7 @@
                     data-toggle="tooltip"
                     title="3 New Messages"
                     class="badge badge-light"
-                    >3</span
+                    >mesaje necititie</span
                 >
                 <button
                     type="button"
@@ -141,7 +141,7 @@
                                     <small
                                         class="contacts-list-date float-right"
                                     >
-                                        <!-- {{ formatTime(user.last_active) }} -->
+                                        {{ formatTime(user.last_active) }}
                                     </small>
                                 </span>
                                 <span class="contacts-list-msg">

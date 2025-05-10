@@ -3,23 +3,40 @@
 namespace App\Models;
 
 use App\Models\Employee;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'latitude', 'longitude', 'radius', 'company_id'];
+    use SoftDeletes;
+    protected $fillable = ['name', 'latitude', 'longitude', 'radius', 'company_id','project_id'];
 
-    public function company()
+    public function company() // Adăugat pentru locațiile permanente
     {
         return $this->belongsTo(Company::class);
     }
-
+// adaugat azi 
+    public function project(): BelongsTo // Adăugat pentru locațiile de șantier
+    {
+        return $this->belongsTo(Project::class);
+    }
+    public function getLocationTypeAttribute(): string // Accessor adăugat pentru tipul locației
+    {
+        return match ($this->type) {
+            'birou' => 'Birou Central',
+            'santier' => 'Șantier',
+            'depozit' => 'Depozit',
+            default => 'Necunoscut',
+        };
+    }
+// pana aici adaugat azi
     public function employees()
     {
-        return $this->belongsToMany(Employee::class, 'employee_location', 'location_id', 'employee_id');
+        return $this->belongsToMany(Employee::class, 'employee_location', 'location_id', 'employee_id')->withTimestamps();
     }
     public function distanceTo($latitude, $longitude)
     {

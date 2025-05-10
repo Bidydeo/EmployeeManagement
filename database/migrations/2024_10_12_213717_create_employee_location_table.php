@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('employee_location', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete;
-            $table->foreignId('location_id')->constrained('locations')->cascadeOnDelete;
-            $table->timestamps();
+            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
+            $table->foreignId('location_id')->constrained('locations')->cascadeOnDelete();
+            $table->softDeletes(); // adaugă coloana deleted_at
             $table->unique(['employee_id', 'location_id']);
+            $table->timestamps();
         });
     }
 

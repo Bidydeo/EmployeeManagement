@@ -53,8 +53,8 @@ class LeaveCreated extends Notification
                 ->line('Stare: ' . $this->leave->status)
                 ->line('Motiv: ' . $this->leave->reason)
                 ->line('Te rugăm să aprobi sau să respingi această cerere!')
-                // ->line('**[Aprobă cererea](' . route('leaves.substituteApproved', $this->leave->id) . ')**')
-                // ->line('**[Respinge cererea](' . route('leaves.substituteRejected', $this->leave->id) . ')**')
+                ->line('**[Aprobă cererea](' . route('leaves_substituteApproved', $this->leave->id) . ')**')
+                ->line('**[Respinge cererea](' . route('leaves_substituteRejected', $this->leave->id) . ')**')
                 ->line('Mulțumim!');
 }
 

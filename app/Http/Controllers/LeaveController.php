@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use App\Models\Leave;
-use App\Models\LeaveType;
-use App\Notifications\LeaveCreated;
-use App\Notifications\LeaveManagerApproved;
-use App\Notifications\LeaveSubstituteApproved;
-use App\Notifications\LeaveUpdated;
 use Carbon\Carbon;
+use App\Models\Leave;
+use App\Models\Employee;
+use App\Models\LeaveType;
 use Illuminate\Http\Request;
+use App\Notifications\LeaveCreated;
+use App\Notifications\LeaveUpdated;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\LeaveManagerApproved;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\LeaveSubstituteApproved;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 
 class LeaveController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
        // Obținem utilizatorul autentificat
@@ -91,7 +93,7 @@ class LeaveController extends Controller
     ? 'Cererea de concediu a fost creată și notificarea a fost trimisă persoanei inlocuitoare.' 
     : 'Cererea de concediu a fost creată și notificarea a fost trimisă managerului de departament.';
 
-    return redirect()->route('leaves.index')->with('success', $message);
+    return redirect()->route('leaves_index')->with('success', $message);
     
     }
     // Metodă pentru calcularea zilelor de concediu rămase
@@ -114,13 +116,18 @@ class LeaveController extends Controller
         return $accumulatedDays - $leaveRequestedDays;
     }
     public function edit($leaveId)
-        {
-            $leave = Leave::findOrFail($leaveId);
-            $leaves = Leave::all();
-            $employees = Auth::user()->employee->company->employees;
-            $leave_types = LeaveType::all();
-            return view('leaves.edit', compact('leave','leaves','employees','leave_types'));
-        }
+    {
+        $leave = Leave::findOrFail($leaveId);
+
+        // Autorizează dacă userul e solicitantul SAU înlocuitorul
+        $this->authorize('edit', $leave); // apelează LeavePolicy@edit
+
+        $leaves = Leave::all();
+        $employees = Auth::user()->employee->company->employees;
+        $leave_types = LeaveType::all();
+
+        return view('leaves.edit', compact('leave', 'leaves', 'employees', 'leave_types'));
+    }
     public function update(Request $request, $leaveId)
         {
             $leave = Leave::findOrFail($leaveId);
@@ -155,20 +162,24 @@ class LeaveController extends Controller
         : 'Cererea de concediu a fost actualizate și notificarea a fost trimisă managerului de departament.';
         
 
-        return redirect()->route('leaves.index')->with('success', $message);
+        return redirect()->route('leaves_index')->with('success', $message);
     
         }
     public function destroy($leaveId)
     {
         $leave = Leave::findOrFail($leaveId);
+        $this->authorize('delete', $leave);
+        $leave = Leave::findOrFail($leaveId);
         $leave->delete();
 
-        return redirect()->route('leaves.index')->with('success', 'Cererea de concediu a fost ștearsă.');
+        return redirect()->route('leaves_index')->with('success', 'Cererea de concediu a fost ștearsă.');
     }
 
 
     public function substituteApproved($leaveId)
     {
+        $leave = Leave::findOrFail($leaveId);
+        $this->authorize('substituteApproval', $leave);
         $leaveApproval = Leave::findOrFail($leaveId);
         $leaveApproval->substituteApproved = true;
         $leaveApproval->status = 'approvedBySubstitute';
@@ -184,6 +195,8 @@ class LeaveController extends Controller
     }
         public function substituteRejected($leaveId)
     {
+        $leave = Leave::findOrFail($leaveId);
+        $this->authorize('substituteApproval', $leave);
         $leaveApproval = Leave::findOrFail($leaveId);
         $leaveApproval->substituteApproved = false;
         $leaveApproval->status = 'rejectedBySubstitute';
@@ -196,6 +209,8 @@ class LeaveController extends Controller
     }
     public function managerApproved(Request $request, $leaveId)
     {
+        $leave = Leave::findOrFail($leaveId);
+        $this->authorize('managerApproval', $leave);
         $leaveApproval = Leave::findOrFail($leaveId);
         $leaveApproval->managerApproved = true;
         $leaveApproval->status = 'approved';
@@ -205,17 +220,19 @@ class LeaveController extends Controller
            Notification::route('mail', [
     'admin@dev.neotechnik.ro' => 'Razvan',
     ])->notify(new LeaveManagerApproved($leaveApproval));
-        return redirect()->route('leaves.index')->with('success', 'Cererea de concediu a fost aprobată de manager');
+        return redirect()->route('leaves_index')->with('success', 'Cererea de concediu a fost aprobată de manager');
     }
 
     public function managerRejected(Request $request, $leaveId)
     {
+        $leave = Leave::findOrFail($leaveId);
+        $this->authorize('managerApproval', $leave);
         $leaveApproval = Leave::findOrFail($leaveId);
         $leaveApproval->managerApproved = false;
         $leaveApproval->status = 'rejected';
         $leaveApproval->save();
 
-        return redirect()->route('leaves.index')->with('error', 'Cererea de concediu a fost respinsă de manager.');
+        return redirect()->route('leaves_index')->with('error', 'Cererea de concediu a fost respinsă de manager.');
     }
 
 }

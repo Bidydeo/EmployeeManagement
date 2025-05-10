@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends($userLayout)
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -30,7 +30,7 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="{{ route('leaves.index') }}" class="small-box-footer">More info <i
+                        <a href="{{ route('leaves_index') }}" class="small-box-footer">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -57,55 +57,14 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="{{ route('leaves.index') }}" class="small-box-footer">More info <i
+                        <a href="{{ route('leaves_index') }}" class="small-box-footer">More info <i
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <!-- Left col -->
-                <section id="left-col" class="col-lg-7 connectedSortable">
-                    <div class="card col-md-12 mr-2">
-                        <div class="card-header">
-                            <h3 class="card-title">Calendar</h3>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-tool" data-card-widget="maximize">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <section class="content">
-                                <div class="col-md-12">
-                                    <div class="card card-primary">
-                                        <div class="card-body p-0">
-                                            <!-- THE CALENDAR -->
-                                            <div id="calendar"></div>
-                                        </div>
-                                        <!-- /.card-body -->
-                                    </div>
-                                    <!-- /.card -->
-                                </div>
-                            </section>
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            Footer
-                            <div x-init="Echo.channel('chat')
-                                .listen('MessageSent', (event) => { console.log(event) })"></div>
-                        </div>
-                        <!-- /.card-footer-->
-                    </div>
-                </section>
-                <!-- /.Left col -->
-                <!-- right col (We are only adding the ID to make the widgets sortable)-->
-                <section ìd="right-col" class="col-lg-5 connectedSortable">
+                <section id="left-col" class="col-lg-4 connectedSortable">
                     <div class="card col-md-12 ml-2">
                         <div class="card-header">
                             <h3 class="card-title">Title</h3>
@@ -123,14 +82,14 @@
                                 <div style="text-align: center">
                                     <h2>Astazi: {{ date('l, d-m-Y') }}</h2>
                                 </div>
-                                <button id="clockInBtn" class="btn-lg btn-primary m-5">ClockIn</button>
-                                <button id="clockOutBtn" class=" btn-lg btn-secondary m-5 float-right">ClockOut</button>
+                                <button id="clockInBtn" class="btn-lg btn-primary m-3">ClockIn</button>
+                                <button id="clockOutBtn" class=" btn-lg btn-secondary m-3 float-right">ClockOut</button>
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th class="hide-on-small">Day</th>
-                                            <th>Date</th>
-                                            <th>Employee</th>
+                                            <th class="d-none  d-xl-none">Day</th>
+                                            <th class="d-none  d-xl-none">Date</th>
+                                            <th class="d-none d-md-block d-xl-none">Employee</th>
                                             <th>Location</th>
                                             <th>ClockIn</th>
                                             <th>ClockOut</th>
@@ -139,9 +98,12 @@
                                     <tbody id="attendance-tbody">
                                         @foreach ($attendances->sortByDesc('created_at')->take(10) as $attendance)
                                             <tr>
-                                                <td>{{ \Carbon\Carbon::parse($attendance->date)->format('l') }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($attendance->date)->format('d-m-Y') }}</td>
-                                                <td>{{ $attendance->employee->employee_name }}</td>
+                                                <td class="d-none d-xl-none">
+                                                    {{ \Carbon\Carbon::parse($attendance->date)->format('l') }}</td>
+                                                <td class="d-none d-xl-none">
+                                                    {{ \Carbon\Carbon::parse($attendance->date)->format('d-m-Y') }}</td>
+                                                <td class="d-none d-md-block d-xl-none">
+                                                    {{ $attendance->employee->employee_name }}</td>
                                                 <td>{{ $attendance->location->name }}</td>
                                                 <td class="clock-in-time">{{ $attendance->clock_in_time }}</td>
                                                 <td class="clock-out-time">{{ $attendance->clock_out_time }}</td>
@@ -255,6 +217,46 @@
                         <!-- /.card-footer-->
                     </div>
                     <!--/.direct-chat -->
+                </section>
+                <!-- /.Left col -->
+                <!-- right col (We are only adding the ID to make the widgets sortable)-->
+                <section ìd="right-col" class="col-lg-8 connectedSortable">
+                    <div class="card col-md-12 mr-2">
+                        <div class="card-header">
+                            <h3 class="card-title">Calendar</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                    title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <section class="content">
+                                <div class="col-md-12">
+                                    <div class="card card-primary">
+                                        <div class="card-body p-0">
+                                            <!-- THE CALENDAR -->
+                                            <div id="calendar"></div>
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                            </section>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            Footer
+                        </div>
+                        <!-- /.card-footer-->
+                    </div>
                 </section>
             </div>
         </div>
@@ -406,35 +408,4 @@
             }
         }
     </script>
-    {{-- <script>
-        const reverb = new Reverb('attendance-channel');
-
-        // Ascultă evenimentele de tip NewAttendanceAdded
-        reverb.listen('NewAttendanceAdded', function(event) {
-
-            // Actualizează tabelul de prezență cu noua înregistrare
-            updateTable(attendance.data);
-            console.log(attendance);
-
-        });
-
-        // Funcția de actualizare a tabelului
-        function updateTable(attendance) {
-            var tableBody = document.getElementById('attendance-tbody'); // Selectorul pentru tabel
-
-            // Creează un nou rând cu datele de prezență primite
-            var newRow = document.createElement('tr');
-            newRow.innerHTML = `
-        <td>${attendance.day_of_week}</td>
-        <td>${attendance.date}</td>
-        <td>${attendance.employee_name}</td>
-        <td>${attendance.location_name}</td>
-        <td>${attendance.clock_in_time}</td>
-        <td>${attendance.clock_out_time || 'N/A'}</td>
-        `;
-
-            // Adaugă noul rând în tabel
-            tableBody.insertBefore(newRow, tableBody.firstChild);
-        }
-    </script> --}}
 @endsection

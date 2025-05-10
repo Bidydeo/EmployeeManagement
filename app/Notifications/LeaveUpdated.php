@@ -55,8 +55,8 @@ class LeaveUpdated extends Notification
                     ->line('Stare: '.$this->leave->status)
                     ->line('Motiv: '.$this->leave->reason)
                     ->line('Te rugăm să aprobi sau să respingi această cerere!')
-                    // ->action('Aproba cererea', route('leaves.approve', $this->leave->id))
-                    // ->action('Rspinge cererea', route('leaves.reject', $this->leave->id))
+                    ->action('Aproba cererea', route('leaves_managerApproved', $this->leave->id))
+                    ->action('Rspinge cererea', route('leaves_managerRejected', $this->leave->id))
                     ->action('Vezi detalii', url('/leaves/' . $this->leave->id))
                     ->line('Mulțumim!');
     }

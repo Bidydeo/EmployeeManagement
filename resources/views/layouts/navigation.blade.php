@@ -38,63 +38,54 @@
               </div>
           </li>
           <!-- Messages Dropdown Menu -->
-          <li class="nav-item dropdown">
-              <a class="nav-link" data-toggle="dropdown" href="#">
-                  <i class="far fa-comments"></i>
-                  <span class="badge badge-danger navbar-badge">3</span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                  <a href="#" class="dropdown-item">
-                      <!-- Message Start -->
-                      <div class="media">
-                          <img src="/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                          <div class="media-body">
-                              <h3 class="dropdown-item-title">
-                                  Brad Diesel
-                                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                              </h3>
-                              <p class="text-sm">Call me whenever you can...</p>
-                              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                          </div>
-                      </div>
-                      <!-- Message End -->
+          @if ($usersWithUnreadMessages->count() > 0)
+              <li class="nav-item dropdown">
+                  <a class="nav-link" data-toggle="dropdown" href="#">
+                      <i class="far fa-comments"></i>
+                      @if (Auth::user()->messages_receiver->where('is_read', false)->count() > 0)
+                          <span
+                              class="badge badge-danger navbar-badge">{{ Auth::user()->messages_receiver->where('is_read', false)->count() }}</span>
+                      @endif
                   </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="#" class="dropdown-item">
+                  <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                       <!-- Message Start -->
-                      <div class="media">
-                          <img src="/dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                          <div class="media-body">
-                              <h3 class="dropdown-item-title">
-                                  John Pierce
-                                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                              </h3>
-                              <p class="text-sm">I got your message bro</p>
-                              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                          </div>
-                      </div>
-                      <!-- Message End -->
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="#" class="dropdown-item">
-                      <!-- Message Start -->
-                      <div class="media">
-                          <img src="/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                          <div class="media-body">
-                              <h3 class="dropdown-item-title">
-                                  Nora Silvester
-                                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                              </h3>
-                              <p class="text-sm">The subject goes here</p>
-                              <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                          </div>
-                      </div>
-                      <!-- Message End -->
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-              </div>
-          </li>
+                      @foreach ($usersWithUnreadMessages as $user)
+                          <a href="/chat/{{ $user->id }}" class="dropdown-item">
+                              <div class="media">
+                                  @php
+                                      $unreadCount = $user->messages_sender->where('is_read', false)->count();
+                                  @endphp
+
+                                  @if ($unreadCount > 0)
+                                      <span class="badge badge-danger navbar-badge">{{ $unreadCount }}</span>
+                                  @endif
+
+                                  <img src="/storage/users_avatar/{{ $user->avatar }}" alt="{{ $user->name }}"
+                                      class="img-size-50 mr-3 img-circle">
+
+                                  <div class="media-body">
+                                      <h3 class="dropdown-item-title">
+                                          {{ $user->name }}
+                                          <p class="text-sm text-muted">
+                                              <i class="far fa-clock mr-1"> Last seen:</i>
+                                              {{ $user->last_active ? $user->last_active->diffForHumans() : 'Inactive' }}
+                                          </p>
+                                      </h3>
+                                      <p class="text-sm">
+                                          Message: {{ optional($user->last_unread_message)->text ?? 'No messages yet' }}
+                                          <span class="ml-1">
+                                              ({{ $user->last_unread_message->created_at->diffForHumans() }})
+                                          </span>
+                                      </p>
+                                  </div>
+                              </div>
+                          </a>
+                          <div class="dropdown-divider"></div>
+                      @endforeach
+                      <a href="/contacts" class="dropdown-item dropdown-footer">See All Messages</a>
+                  </div>
+              </li>
+          @endif
           <!-- Notifications Dropdown Menu -->
           <li class="nav-item dropdown">
               <a class="nav-link" data-toggle="dropdown" href="#">
@@ -129,12 +120,12 @@
           </li>
           <li class="nav-item">
               <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <span class="user-img">
+                  <span class="user-img " style="display: inline-flex; align-items: center;">
                       <img src="{{ URL::to('/storage/users_avatar/' . Auth::user()->avatar) }}"
-                          alt="{{ Auth::user()->name }}" width="20" height="20"
-                          class="img-circle elevation-2">
-                      <span class="status online"></span></span>
-                  <span>{{ Auth::user()->name }}</span>
+                          alt="{{ Auth::user()->name }}" width="20" height="20" class="img-circle elevation-2"
+                          style="margin-right: 5px;">
+                      <span class="status online"></span>
+                      <span>{{ Auth::user()->name }}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                   <span class="dropdown-item dropdown-header">You are logged as {{ Auth::user()->name }}</span>
@@ -151,11 +142,16 @@
                       </form>
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a href="/profile" class="dropdown-item">
-                      <i class="fas fa-envelope mr-2"></i>{{ Auth::user()->name }} profile
-                      <span
-                          class="float-right text-muted text-sm">{{ Auth::user()->created_at->diffforHumans() }}</span>
-                  </a>
+                    @role('Super Admin')
+                        <a href="/admin/profile" class="dropdown-item">
+                    @endrole
+                    @unlessrole('Super Admin')
+                        <a href="/profile" class="dropdown-item">
+                    @endunlessrole
+                          <i class="fas fa-envelope mr-2"></i>{{ Auth::user()->name }} profile
+                          <span
+                              class="float-right text-muted text-sm">{{ Auth::user()->created_at->diffforHumans() }}</span>
+                      </a>
               </div>
           </li>
       </ul>

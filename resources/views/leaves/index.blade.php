@@ -1,22 +1,26 @@
-@extends('layouts.master')
+@extends($userLayout)
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Creează cerere de concediu</h1>
+                    <h1>Leaves</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/dashboard">Dasshboard</a></li>
+                        @role('Super Admin')
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                        @endrole
+                        @unlessrole('Super Admin')
+                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                        @endunlessrole
                         <li class="breadcrumb-item active">Creează cerere de concediu</li>
                     </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
-
     <!-- Main content -->
     <section class="content">
         <!-- Default box -->
@@ -43,7 +47,7 @@
                     </div>
                 @endif
                 <div class="pull-right mb-2">
-                    <a class="btn btn-success" href="{{ route('leaves.create') }}"> Create Leave</a>
+                    <a class="btn btn-success" href="{{ route('leaves_create') }}"> Create Leave</a>
                 </div>
                 <table class="table table-bordered">
                     <thead>
@@ -77,7 +81,7 @@
                             <td>{{ $leave->status }}</td>
                             <td>
                                 @if ($leave->substitute_employee == Auth::user()->employee && $leave->status == 'Pending')
-                                    <form action="{{ route('leaves.substituteApproved', $leave->id) }}" method="POST"
+                                    <form action="{{ route('leaves_substituteApproved', $leave->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-success"
@@ -85,7 +89,7 @@
                                             Aprobare
                                         </button>
                                     </form>
-                                    <form action="{{ route('leaves.substituteRejected', $leave->id) }}" method="POST"
+                                    <form action="{{ route('leaves_substituteRejected', $leave->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-warning"
@@ -94,7 +98,7 @@
                                         </button>
                                     </form>
                                 @elseif ($leave->employee->department->manager == Auth::user()->employee && $leave->status == 'ApprovedBySubstitute')
-                                    <form action="{{ route('leaves.managerApproved', $leave->id) }}" method="POST"
+                                    <form action="{{ route('leaves_managerApproved', $leave->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-success"
@@ -102,7 +106,7 @@
                                             Aprobare Manager
                                         </button>
                                     </form>
-                                    <form action="{{ route('leaves.managerRejected', $leave->id) }}" method="POST"
+                                    <form action="{{ route('leaves_managerRejected', $leave->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-warning"
@@ -111,14 +115,15 @@
                                         </button>
                                     </form>
                                 @elseif($leave->employee_id == Auth::user()->employee->id && $leave->status == 'Pending')
-                                    <a href="{{ route('leaves.edit', $leave->id) }}" class="btn btn-info">Editare</a>
-                                    <form action="{{ route('leaves.delete', $leave->id) }}" method="POST"
+                                    <a href="{{ route('leaves_edit', $leave->id) }}"
+                                        class="btn btn-primary btn-sm m-2">Editare</a>
+                                    <form action="{{ route('leaves_delete', $leave->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"
+                                        <button type="submit" class="btn btn-danger btn-sm m-2"
                                             onclick="return confirm('Ești sigur că vrei să ștergi această cerere?');">
-                                            Ștergere
+                                            Delete
                                         </button>
                                     @else
                                         <button class="btn btn-secondary" disabled>{{ $leave->status }}

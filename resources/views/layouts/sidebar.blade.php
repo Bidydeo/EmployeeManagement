@@ -17,7 +17,12 @@
                  <span class="status online"></span></span>
              </div>
              <div class="info">
-                 <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
+                 @role('Super Admin')
+                     <a href="/admin/profile" class="d-block">{{ Auth::user()->name }}</a>
+                 @endrole
+                 @unlessrole('Super Admin')
+                     <a href="/profile" class="d-block">{{ Auth::user()->name }}</a>
+                 @endunlessrole
              </div>
          </div>
 
@@ -39,12 +44,57 @@
              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                  data-accordion="false">
                  <!-- Add icons to the links using the .nav-icon class
-             with font-awesome or any other icon font library -->
+                 with font-awesome or any other icon font library -->
                  <li class="nav-item">
-                     <a href="/dashboard" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
-                         <i class="nav-icon fas fa-tachometer-alt"></i>
+                     @role('Super Admin')
+                         <a href="/admin/dashboard" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                         @endrole
+                         @unlessrole('Super Admin')
+                             <a href="/dashboard" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                             @endunlessrole
+                             <i class="nav-icon fas fa-tachometer-alt"></i>
+                             <p>
+                                 Dashboard
+                             </p>
+                         </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/companies" class="nav-link {{ request()->is('companies') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
                          <p>
-                             Dashboard
+                             Companies
+                         </p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/clients" class="nav-link {{ request()->is('clients') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Clients
+                         </p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/projects" class="nav-link {{ request()->is('projects') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Projects
+                         </p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/employees" class="nav-link {{ request()->is('employees') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Employees
+                         </p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/teams" class="nav-link {{ request()->is('teams') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Teams
                          </p>
                      </a>
                  </li>
@@ -55,7 +105,32 @@
                              Leaves
                          </p>
                      </a>
-                     {{-- <ul class="nav nav-treeview">
+                 </li>
+                 <li class="nav-item">
+                     <a href="/contacts" class="nav-link {{ request()->is('contacts') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Contacts
+                         </p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/locations" class="nav-link {{ request()->is('locations') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Locations
+                         </p>
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/mail/inbox" class="nav-link {{ request()->is('mail/inbox') ? 'active' : '' }}">
+                         <i class="nav-icon fas fa-table"></i>
+                         <p>
+                             Mailbox
+                         </p>
+                     </a>
+                 </li>
+                 {{-- <ul class="nav nav-treeview">
                          <li class="nav-item">
                              <a href="/companies" class="nav-link {{ request()->is('companies') ? 'active' : '' }} ">
                                  <i class="nav-icon far fa-circle text-info"></i>

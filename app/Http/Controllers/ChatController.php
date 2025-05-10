@@ -37,6 +37,21 @@ class ChatController extends Controller
         ]);
     }
 
+    public function getContacts()
+    {
+        $AuthUserId = Auth::id();
+
+        // // Obținem utilizatorii cu ultimul mesaj și ora mesajului
+        $users = User::where('id', '!=', $AuthUserId)
+        ->select('id', 'name', 'avatar', 'last_active')
+        ->with(['messages_sender' => function ($query) {
+            $query->where('receiver_id', Auth::id())->latest()->limit(1); // Obține ultimul mesaj
+        }])
+        ->get();
+
+        return view('contacts',['users'=>$users]);
+    }
+
     public function getMessages($userId)
     {
     try {
